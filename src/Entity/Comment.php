@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CommentRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
@@ -11,9 +12,11 @@ class Comment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups('app_v1_recipe_browse')]
     private $id;
 
     #[ORM\Column(type: 'text')]
+    #[Groups('app_v1_recipe_browse')]
     private $content;
 
     #[ORM\Column(type: 'datetime_immutable')]

@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\PictureRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PictureRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PictureRepository::class)]
 class Picture
@@ -11,12 +12,15 @@ class Picture
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups('app_v1_recipe_browse')]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups('app_v1_recipe_browse')]
     private $name;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups('app_v1_recipe_browse')]
     private $url;
 
     #[ORM\ManyToOne(targetEntity: Recipe::class, inversedBy: 'pictures')]

@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\TypeRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\TypeRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TypeRepository::class)]
 class Type
@@ -13,9 +14,11 @@ class Type
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups('app_v1_recipe_browse')]
     private $id;
 
     #[ORM\Column(type: 'string', length: 128)]
+    #[Groups('app_v1_recipe_browse')]
     private $name;
 
     #[ORM\Column(type: 'string', length: 255)]
