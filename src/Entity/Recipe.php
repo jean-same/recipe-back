@@ -49,6 +49,9 @@ class Recipe
     #[Groups('app_v1_recipe_browse')]
     private $pictures;
 
+    #[ORM\Column(type: 'boolean')]
+    private $to_validate;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -205,6 +208,18 @@ class Recipe
                 $picture->setRecipe(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getToValidate(): ?bool
+    {
+        return $this->to_validate;
+    }
+
+    public function setToValidate(bool $to_validate): self
+    {
+        $this->to_validate = $to_validate;
 
         return $this;
     }
