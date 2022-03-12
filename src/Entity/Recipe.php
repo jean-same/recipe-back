@@ -37,7 +37,7 @@ class Recipe
     #[Groups('app_v1_recipe_browse')]
     private $type;
 
-    #[ORM\ManyToMany(targetEntity: Ingredient::class, mappedBy: 'recipe')]
+    #[ORM\ManyToMany(targetEntity: Ingredient::class, cascade:["persist"], mappedBy: 'recipe')]
     #[Groups('app_v1_recipe_browse')]
     private $ingredients;
 
@@ -45,7 +45,7 @@ class Recipe
     #[Groups('app_v1_recipe_browse')]
     private $difficulty;
 
-    #[ORM\OneToMany(mappedBy: 'recipe', targetEntity: Picture::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'recipe', targetEntity: Picture::class, cascade:["persist"], orphanRemoval: true)]
     #[Groups('app_v1_recipe_browse')]
     private $pictures;
 

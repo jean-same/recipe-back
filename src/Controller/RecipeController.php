@@ -66,8 +66,6 @@ class RecipeController extends AbstractController
 
         $jsonContent = $request->getContent();
 
-        //dd($jsonContent);
-
         $this->serializer->deserialize($jsonContent, Recipe::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $recipe]);
 
         $errors = $this->validator->validate($recipe);
@@ -80,9 +78,52 @@ class RecipeController extends AbstractController
             'message' => 'Recette mise à jour',
             'title' => $recipe->getTitle()
         ];
-        
+
         return $this->json($responseAsArray, Response::HTTP_OK);
 
+    }
+
+    #[Route('/', name: 'add', methods: ['POST'])]
+    public function add(Request $request):Response
+    {
+        $jsonContent = $request->getContent();
+
+        $recipe = $this->serializer->deserialize($jsonContent, Recipe::class, 'json');
+
+        $errors = $this->validator->validate($recipe);
+
+        $this->errorsCheck($errors);
+
+        $this->em->persist($recipe);
+        $this->em->flush();
+
+        $responseAsArray = [
+            'message' => 'Recette ajoutée',
+            'title' => $recipe->getTitle()
+        ];
+
+        return $this->json($responseAsArray, Response::HTTP_CREATED);
+    }
+
+    #[Route('/{recipeId<\d+>}', name: 'delete', methods: ['DELETE'])]
+    public function delete(int $recipeId): Response
+    {
+        $recipe = $this->recipeRepository->find($recipeId);
+
+        if (is_null($recipe)) {
+            return $this->getNotFoundResponse();
+        }
+
+        $this->checkUserAuthorizationService->isAllow($recipe);
+
+        $this->em->remove($recipe);
+        $this->em->flush();
+
+        $responseAsArray = [
+            'message' => 'Recette supprimée',
+            'title' => $recipe->getTitle()
+        ];
+        return $this->json($responseAsArray);
     }
 
     public function found($result) {

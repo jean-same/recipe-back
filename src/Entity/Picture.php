@@ -23,7 +23,7 @@ class Picture
     #[Groups('app_v1_recipe_browse')]
     private $url;
 
-    #[ORM\ManyToOne(targetEntity: Recipe::class, inversedBy: 'pictures')]
+    #[ORM\ManyToOne(targetEntity: Recipe::class , inversedBy: 'pictures')]
     #[ORM\JoinColumn(nullable: false)]
     private $recipe;
 
