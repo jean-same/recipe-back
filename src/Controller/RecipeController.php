@@ -6,7 +6,6 @@ use App\Entity\Recipe;
 use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
 use App\Service\CheckUserAuthorizationService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,15 +21,13 @@ class RecipeController extends AbstractController
     private $validator;
     private $serializer;
     private $recipeRepository;
-    private $checkUserAuthorizationService;
 
-    public function __construct( RecipeRepository $recipeRepository,  SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $em , CheckUserAuthorizationService $checkUserAuthorizationService)
+    public function __construct( RecipeRepository $recipeRepository,  SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $em )
     {
         $this->em                               = $em;
         $this->validator                        = $validator;
         $this->serializer                       = $serializer;
         $this->recipeRepository                 = $recipeRepository;
-        $this->checkUserAuthorizationService    = $checkUserAuthorizationService;
     }
 
     #[Route('/', name: 'browse' , methods: ['GET'])]
@@ -63,7 +60,7 @@ class RecipeController extends AbstractController
             return $this->getNotFoundResponse();
         }
 
-        $this->checkUserAuthorizationService->isAllow($recipe);
+        $this->denyAccessUnlessGranted('CURRENT_RECIPE_OWNER', $recipe , "Accès interdit");
 
         $jsonContent = $request->getContent();
 
@@ -115,7 +112,7 @@ class RecipeController extends AbstractController
             return $this->getNotFoundResponse();
         }
 
-        $this->checkUserAuthorizationService->isAllow($recipe);
+        $this->denyAccessUnlessGranted('CURRENT_RECIPE_OWNER', $recipe , "Accès interdit");
 
         $this->em->remove($recipe);
         $this->em->flush();
