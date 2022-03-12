@@ -37,7 +37,7 @@ class Recipe
     #[Groups('app_v1_recipe_browse')]
     private $type;
 
-    #[ORM\ManyToMany(targetEntity: Ingredient::class, cascade:["persist"], mappedBy: 'recipe')]
+    #[ORM\ManyToMany(targetEntity: Ingredient::class, fetch: 'EAGER', cascade:["persist"], mappedBy: 'recipe')]
     #[Groups('app_v1_recipe_browse')]
     private $ingredients;
 

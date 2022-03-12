@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Recipe;
+use App\Repository\IngredientRepository;
 use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use App\Service\CheckUserAuthorizationService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,19 +24,32 @@ class RecipeController extends AbstractController
     private $validator;
     private $serializer;
     private $recipeRepository;
+    private $ingredientRepository;
 
-    public function __construct( RecipeRepository $recipeRepository,  SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $em )
+    public function __construct( RecipeRepository $recipeRepository, IngredientRepository $ingredientRepository,  SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $em )
     {
         $this->em                               = $em;
         $this->validator                        = $validator;
         $this->serializer                       = $serializer;
         $this->recipeRepository                 = $recipeRepository;
+        $this->ingredientRepository             = $ingredientRepository;
     }
 
     #[Route('/', name: 'browse' , methods: ['GET'])]
     public function browse(): Response
     {
-        $recipes = $this->recipeRepository->findAll();
+        $recipes = $this->recipeRepository->findBy(["to_validate" => 0 ]) ;
+
+        return $this->json($this->found($recipes), Response::HTTP_OK, [], ['groups' => "app_v1_recipe_browse"]);
+    }
+
+    #[Route('/my-recipes', name: 'my_recipes' , methods: ['GET'])]
+    public function myRecipes(Security $security): Response
+    {
+        /** @var User */
+        $user = $security->getUser();
+
+        $recipes = $user->getRecipes();
 
         return $this->json($this->found($recipes), Response::HTTP_OK, [], ['groups' => "app_v1_recipe_browse"]);
     }
@@ -50,6 +66,7 @@ class RecipeController extends AbstractController
         return $this->json($this->found($recipe), Response::HTTP_OK, [], ['groups' => "app_v1_recipe_browse"]);
 
     }
+    
 
     #[Route('/{recipeId<\d+>}', name: 'edit', methods: ['PATCH'])]
     public function edit(int $recipeId ,  Request $request) : Response {
@@ -101,6 +118,44 @@ class RecipeController extends AbstractController
         ];
 
         return $this->json($responseAsArray, Response::HTTP_CREATED);
+    }
+
+    #[Route('/{recipeId<\d+>}/add-ingredients', name: 'add_ingredients', methods: ['PATCH'])]
+    public function addIngredients($recipeId, Request $request):Response
+    {
+
+        $recipe = $this->recipeRepository->find($recipeId);
+
+        if (is_null($recipe)) {
+            return $this->getNotFoundResponse();
+        }
+
+        $this->denyAccessUnlessGranted('CURRENT_RECIPE_OWNER', $recipe , "Accès interdit");
+
+        $jsonContent = $request->getContent();
+        $jsonDecoded = json_decode($jsonContent);
+        $ingredientAdded = 0;
+        
+
+        foreach($jsonDecoded as $ingredientId) {
+            $ingredient = $this->ingredientRepository->find($ingredientId);
+
+            if(!in_array($ingredient, $recipe->getIngredients()->toArray() ) ) {
+                $recipe->addIngredient($ingredient);
+                $ingredientAdded++;
+            }
+           
+        }
+
+        $this->em->persist($recipe);
+        $this->em->flush();
+
+        $responseAsArray = [
+            'ingredient ajouté' => $ingredientAdded,
+            'message' => "Ingredient ajouté: $ingredientAdded"
+        ];
+
+        return $this->json($responseAsArray, Response::HTTP_OK);
     }
 
     #[Route('/{recipeId<\d+>}', name: 'delete', methods: ['DELETE'])]
