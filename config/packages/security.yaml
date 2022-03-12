@@ -47,6 +47,10 @@ security:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
 
+    role_hierarchy:
+        ROLE_CHIEF:       ROLE_CONTRIBUTOR
+        ROLE_ADMIN:       ROLE_CHIEF
+
 when@test:
     security:
         password_hashers:
