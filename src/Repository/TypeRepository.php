@@ -45,6 +45,20 @@ class TypeRepository extends ServiceEntityRepository
         }
     }
 
+    public function findByNames() {
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            SELECT id, name FROM type t
+            ';
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+
+        // returns an array of arrays (i.e. a raw data set)
+        return $resultSet->fetchAllAssociative();
+    }
+
     // /**
     //  * @return Type[] Returns an array of Type objects
     //  */
