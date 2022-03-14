@@ -14,6 +14,7 @@
         "fakerphp/faker": "^1.19",
         "lexik/jwt-authentication-bundle": "^2.14",
         "mbezhanov/faker-provider-collection": "^2.0",
+        "nelmio/cors-bundle": "^2.2",
         "symfony/console": "6.0.*",
         "symfony/dotenv": "6.0.*",
         "symfony/flex": "^2",
