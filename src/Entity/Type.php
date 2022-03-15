@@ -18,13 +18,14 @@ class Type
     private $id;
 
     #[ORM\Column(type: 'string', length: 128)]
-    #[Groups('app_v1_recipe_browse')]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_type_browse'])]
     private $name;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $description;
 
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: Recipe::class)]
+    #[Groups(['app_v1_type_browse' ])]
     private $recipes;
 
     public function __construct()

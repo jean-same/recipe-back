@@ -14,15 +14,15 @@ class Ingredient
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups('app_v1_recipe_browse')]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_type_browse'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups('app_v1_recipe_browse')]
+    #[Groups(['app_v1_recipe_browse'])]
     private $name;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups('app_v1_recipe_browse')]
+    #[Groups(['app_v1_recipe_browse'])]
     private $description;
 
     #[ORM\ManyToMany(targetEntity: Recipe::class, inversedBy: 'ingredients')]

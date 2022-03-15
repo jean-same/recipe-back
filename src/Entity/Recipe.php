@@ -17,36 +17,36 @@ class Recipe
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups('app_v1_recipe_browse')]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_type_browse'])]
     private $title;
 
     #[ORM\Column(type: 'text')]
-    #[Groups('app_v1_recipe_browse')]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_type_browse'])]
     private $content;
 
     #[ORM\OneToMany(mappedBy: 'recipe', targetEntity: Comment::class, orphanRemoval: true)]
-    #[Groups('app_v1_recipe_browse')]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_type_browse'])]
     private $comments;
 
     #[ORM\ManyToOne(targetEntity: User::class, fetch: 'EAGER' , inversedBy: 'recipes')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups('app_v1_recipe_browse')]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_type_browse'])]
     private $user;
 
     #[ORM\ManyToOne(targetEntity: Type::class, inversedBy: 'recipes')]
-    #[Groups('app_v1_recipe_browse')]
+    #[Groups(['app_v1_recipe_browse'])]
     private $type;
 
     #[ORM\ManyToMany(targetEntity: Ingredient::class, fetch: 'EAGER', cascade:["persist"], mappedBy: 'recipe')]
-    #[Groups('app_v1_recipe_browse')]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_type_browse'])]
     private $ingredients;
 
     #[ORM\ManyToOne(targetEntity: Difficulty::class, inversedBy: 'recipes')]
-    #[Groups('app_v1_recipe_browse')]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_type_browse'])]
     private $difficulty;
 
     #[ORM\OneToMany(mappedBy: 'recipe', targetEntity: Picture::class, cascade:["persist"], orphanRemoval: true)]
-    #[Groups('app_v1_recipe_browse')]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_type_browse'])]
     private $pictures;
 
     #[ORM\Column(type: 'boolean')]

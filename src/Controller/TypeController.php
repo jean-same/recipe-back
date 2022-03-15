@@ -37,4 +37,11 @@ class TypeController extends AbstractController
         return $this->json($this->commonMessageService->found($types), Response::HTTP_OK, []);
     }
 
+    #[Route('/{typeId<\d+>}', name: 'read', methods: ['GET'])]
+    public function read($typeId): Response
+    {
+        $type = $this->typeRepository->find($typeId);
+
+        return $this->json($this->commonMessageService->found($type), Response::HTTP_OK, [], ['groups' => "app_v1_type_browse"]);
+    }
 }
