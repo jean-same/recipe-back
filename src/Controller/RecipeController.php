@@ -43,6 +43,24 @@ class RecipeController extends AbstractController
         return $this->json($this->found($recipes), Response::HTTP_OK, [], ['groups' => "app_v1_recipe_browse"]);
     }
 
+    #[Route('/spec', name: 'browse' , methods: ['GET'])]
+    public function browseSpecificRecipe(Request $request): Response
+    {
+        $queryData = $request->query->get("q");
+        $recipes = null;
+
+        if($queryData != null) {
+            if($queryData == "ml") {
+                $recipes = $this->recipeRepository->findRecipeBy("likes");
+            } elseif($queryData == "mr" ) {
+                $recipes = $this->recipeRepository->findRecipeBy("created_at");
+            }
+        }
+
+        return $this->json($this->found($recipes), Response::HTTP_OK, [], ['groups' => "app_v1_recipe_browse"]);
+    }
+
+
     #[Route('/my-recipes', name: 'my_recipes' , methods: ['GET'])]
     public function myRecipes(Security $security): Response
     {
@@ -53,6 +71,8 @@ class RecipeController extends AbstractController
 
         return $this->json($this->found($recipes), Response::HTTP_OK, [], ['groups' => "app_v1_recipe_browse"]);
     }
+
+
 
     #[Route('/{recipeId<\d+>}', name: 'read', methods: ['GET'])]
     public function read(int $recipeId) : Response

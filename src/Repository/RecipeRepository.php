@@ -45,6 +45,19 @@ class RecipeRepository extends ServiceEntityRepository
         }
     }
 
+    public function findRecipeBy($field) {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "
+            SELECT id, title FROM recipe r ORDER BY r.$field DESC LIMIT 5
+            ";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+
+        // returns an array of arrays (i.e. a raw data set)
+        return $resultSet->fetchAllAssociative();
+    }
+
     // /**
     //  * @return Recipe[] Returns an array of Recipe objects
     //  */

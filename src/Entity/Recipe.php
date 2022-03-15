@@ -24,6 +24,14 @@ class Recipe
     #[Groups(['app_v1_recipe_browse' , 'app_v1_type_browse'])]
     private $content;
 
+    #[ORM\Column(type: 'integer')]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_type_browse'])]
+    private $likes;
+
+    #[ORM\Column(type: 'datetime_immutable')]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_type_browse'])]
+    private $created_at;
+
     #[ORM\OneToMany(mappedBy: 'recipe', targetEntity: Comment::class, orphanRemoval: true)]
     #[Groups(['app_v1_recipe_browse' , 'app_v1_type_browse'])]
     private $comments;
@@ -220,6 +228,30 @@ class Recipe
     public function setToValidate(bool $to_validate): self
     {
         $this->to_validate = $to_validate;
+
+        return $this;
+    }
+
+    public function getLikes(): ?int
+    {
+        return $this->likes;
+    }
+
+    public function setLikes(int $likes): self
+    {
+        $this->likes = $likes;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }
