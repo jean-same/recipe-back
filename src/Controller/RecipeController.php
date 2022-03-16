@@ -43,7 +43,7 @@ class RecipeController extends AbstractController
         return $this->json($this->found($recipes), Response::HTTP_OK, [], ['groups' => "app_v1_recipe_browse"]);
     }
 
-    #[Route('/spec', name: 'browse' , methods: ['GET'])]
+    #[Route('/spec', name: 'browse_spec' , methods: ['GET'])]
     public function browseSpecificRecipe(Request $request): Response
     {
         $queryData = $request->query->get("q");

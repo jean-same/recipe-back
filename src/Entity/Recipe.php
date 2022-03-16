@@ -14,6 +14,7 @@ class Recipe
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_type_browse'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]

@@ -20,10 +20,12 @@ class Comment
     private $content;
 
     #[ORM\Column(type: 'datetime_immutable')]
+    #[Groups('app_v1_recipe_browse')]
     private $created_at;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups('app_v1_recipe_browse')]
     private $user;
 
     #[ORM\ManyToOne(targetEntity: Recipe::class, inversedBy: 'comments')]
