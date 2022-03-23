@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\RecipeRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -67,6 +68,8 @@ class Recipe
         $this->ingredient = new ArrayCollection();
         $this->ingredients = new ArrayCollection();
         $this->pictures = new ArrayCollection();
+        $this->created_at = new DateTimeImmutable();
+        $this->likes = 0;
     }
 
     public function getId(): ?int

@@ -45,6 +45,20 @@ class DifficultyRepository extends ServiceEntityRepository
         }
     }
 
+    public function findForList() {
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            SELECT id, name FROM difficulty d
+            ';
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+
+        // returns an array of arrays (i.e. a raw data set)
+        return $resultSet->fetchAllAssociative();
+    }
+
     // /**
     //  * @return Difficulty[] Returns an array of Difficulty objects
     //  */
