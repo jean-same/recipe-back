@@ -45,6 +45,20 @@ class IngredientRepository extends ServiceEntityRepository
         }
     }
 
+    public function findForList() {
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            SELECT id, name FROM ingredient i
+            ';
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+
+        // returns an array of arrays (i.e. a raw data set)
+        return $resultSet->fetchAllAssociative();
+    }
+
     // /**
     //  * @return Ingredient[] Returns an array of Ingredient objects
     //  */
