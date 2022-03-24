@@ -37,7 +37,12 @@ class UserController extends AbstractController
     {
         $user = $this->userRepository->find($userId);
 
-        //dd($user);
+        if (is_null($user)) {
+            return $this->commonMessageService->getNotFoundResponse();
+        }
+
+        $this->denyAccessUnlessGranted('USER_HAS_RIGHT', $user , "Accès interdit" );
+
         return $this->json($this->commonMessageService->found($user), Response::HTTP_OK, [], ['groups' => "app_v1_user_browse"]);
     }
 
@@ -49,6 +54,8 @@ class UserController extends AbstractController
         if (is_null($user)) {
             return $this->commonMessageService->getNotFoundResponse();
         }
+
+        $this->denyAccessUnlessGranted('USER_HAS_RIGHT', $user , "Accès interdit" );
 
         $jsonContent = $request->getContent();
 
@@ -101,6 +108,10 @@ class UserController extends AbstractController
         if (is_null($user)) {
             return $this->commonMessageService->getNotFoundResponse();
         }
+
+        $this->denyAccessUnlessGranted('USER_HAS_RIGHT', $user , "Accès interdit" );
+
+        $this->isGranted('USER_HAS_RIGHT', $user , "Accès interdit" );
 
         $userPseudo = $user->getPseudo();
 
