@@ -121,6 +121,10 @@ class RecipeController extends AbstractController
     #[Route('/', name: 'add', methods: ['POST'])]
     public function add(Request $request):Response
     {
+        if(!$this->isGranted('ROLE_CONTRIBUTOR')) {
+            throw $this->createAccessDeniedException("Vous n'êtes pas autorisé à ajouter des recettes");
+        }
+
         $jsonContent = $request->getContent();
 
         $recipe = $this->serializer->deserialize($jsonContent, Recipe::class, 'json');

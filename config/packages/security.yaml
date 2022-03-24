@@ -49,8 +49,9 @@ security:
         - { path: ^/api,       roles: PUBLIC_ACCESS }
 
     role_hierarchy:
+        ROLE_ADMIN:       ['ROLE_CHIEF' , 'ROLE_CONTRIBUTOR']
         ROLE_CHIEF:       ROLE_CONTRIBUTOR
-        ROLE_ADMIN:       ROLE_CHIEF
+        
 
 when@test:
     security:
