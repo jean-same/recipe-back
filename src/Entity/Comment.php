@@ -12,20 +12,20 @@ class Comment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['app_v1_recipe_browse' , 'app_v1_type_browse'])]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_type_browse', 'app_v1_user_browse'])]
     private $id;
 
     #[ORM\Column(type: 'text')]
-    #[Groups('app_v1_recipe_browse')]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_user_browse'])]
     private $content;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    #[Groups('app_v1_recipe_browse')]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_user_browse'])]
     private $created_at;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups('app_v1_recipe_browse')]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_user_browse'])]
     private $user;
 
     #[ORM\ManyToOne(targetEntity: Recipe::class, inversedBy: 'comments')]

@@ -14,7 +14,7 @@ class commonMessageService {
         ];
     }
 
-    private function getNotFoundResponse()
+    public function getNotFoundResponse()
     {
         $responseArray = [
             'error' => true,
@@ -24,7 +24,7 @@ class commonMessageService {
         return new JsonResponse($responseArray, Response::HTTP_GONE);
     }
 
-    private function errorsCheck($errors) {
+    public function errorsCheck($errors) {
 
         if (count($errors) > 0) {
             $responseAsArray = [

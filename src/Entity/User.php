@@ -16,28 +16,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups('app_v1_recipe_browse')]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_user_browse'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    #[Groups('app_v1_recipe_browse')]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_user_browse'])]
     private $email;
 
     #[ORM\Column(type: 'json')]
-    #[Groups('app_v1_recipe_browse')]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_user_browse'])]
     private $roles = [];
 
     #[ORM\Column(type: 'string')]
     private $password;
 
     #[ORM\Column(type: 'string', length: 128)]
-    #[Groups('app_v1_recipe_browse')]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_user_browse'])]
     private $pseudo;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class, orphanRemoval: true)]
+    #[Groups(['app_v1_recipe_browse'])]
     private $comments;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Recipe::class, orphanRemoval: true)]
+    #[Groups(['app_v1_recipe_browse' , 'app_v1_user_browse'])]
     private $recipes;
 
     public function __construct()
