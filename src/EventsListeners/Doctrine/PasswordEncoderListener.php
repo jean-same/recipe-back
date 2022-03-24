@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventsListener\Doctrine;
+namespace App\EventsListeners\Doctrine;
 
 use App\Entity\User;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;

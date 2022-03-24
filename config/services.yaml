@@ -48,7 +48,7 @@ services:
                 }
             ]
 
-    App\EventsListener\Doctrine\PasswordEncoderListener:
+    App\EventsListeners\Doctrine\PasswordEncoderListener:
         tags:
             [
                 {

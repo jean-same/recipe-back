@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/api/v1/user', name: 'app_v1_user')]
@@ -40,6 +41,34 @@ class UserController extends AbstractController
         return $this->json($this->commonMessageService->found($user), Response::HTTP_OK, [], ['groups' => "app_v1_user_browse"]);
     }
 
+    #[Route('/{userId<\d+>}', name: 'edit', methods: ['PATCH'])]
+    public function edit(int $userId ,  Request $request) : Response {
+
+        $user = $this->userRepository->find($userId);
+
+        if (is_null($user)) {
+            return $this->commonMessageService->getNotFoundResponse();
+        }
+
+        $jsonContent = $request->getContent();
+
+        $this->serializer->deserialize($jsonContent, User::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $user]);
+
+        $errors = $this->validator->validate($user);
+
+        $this->commonMessageService->errorsCheck($errors);
+
+        $this->em->flush();
+
+        $responseAsArray = [
+            'message' => 'Utilisateur mis à jour',
+            'title' => $user->getPseudo()
+        ];
+
+        return $this->json($responseAsArray, Response::HTTP_OK);
+
+    }
+
     #[Route('', name: 'add', methods: ['POST'])]
     public function add(Request $request):Response
     {
@@ -61,5 +90,27 @@ class UserController extends AbstractController
         ];
 
         return $this->json($responseAsArray, Response::HTTP_CREATED);
+    }
+
+
+    #[Route('/{userId<\d+>}', name: 'delete', methods: ['DELETE'])]
+    public function delete(int $userId): Response
+    {
+        $user = $this->userRepository->find($userId);
+
+        if (is_null($user)) {
+            return $this->commonMessageService->getNotFoundResponse();
+        }
+
+        $userPseudo = $user->getPseudo();
+
+        $this->em->remove($user);
+        $this->em->flush();
+
+        $responseAsArray = [
+            'message' => 'Utilisateur supprimée',
+            'title' => $userPseudo
+        ];
+        return $this->json($responseAsArray);
     }
 }
