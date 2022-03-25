@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CommentRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -31,6 +32,11 @@ class Comment
     #[ORM\ManyToOne(targetEntity: Recipe::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
     private $recipe;
+
+    public function __construct()
+    {
+        $this->created_at = new DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
