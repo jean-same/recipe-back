@@ -65,6 +65,8 @@ class CommentController extends AbstractController
             return $this->commonMessageService->getNotFoundResponse();
         }
 
+        $this->denyAccessUnlessGranted('USER_HAS_RIGHT', $comment->getUser() , "Accès interdit" );
+
         $jsonContent = $request->getContent();
 
         $this->serializer->deserialize($jsonContent, Comment::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $comment]);
@@ -93,6 +95,8 @@ class CommentController extends AbstractController
         if (is_null($comment)) {
             return $this->commonMessageService->getNotFoundResponse();
         }
+
+        $this->denyAccessUnlessGranted('USER_HAS_RIGHT', $comment->getUser() , "Accès interdit" );
 
         $this->isGranted('USER_HAS_RIGHT', $comment , "Accès interdit" );
 
