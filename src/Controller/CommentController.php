@@ -84,4 +84,24 @@ class CommentController extends AbstractController
         return $this->json($responseAsArray, Response::HTTP_OK);
 
     }
+
+    #[Route('/{commentId<\d+>}', name: 'delete', methods: ['DELETE'])]
+    public function delete(int $commentId): Response
+    {
+        $comment = $this->commentRepository->find($commentId);
+
+        if (is_null($comment)) {
+            return $this->commonMessageService->getNotFoundResponse();
+        }
+
+        $this->isGranted('USER_HAS_RIGHT', $comment , "Accès interdit" );
+
+        $this->em->remove($comment);
+        $this->em->flush();
+
+        $responseAsArray = [
+            'message' => 'Commentaire supprimée'
+        ];
+        return $this->json($responseAsArray);
+    }
 }
