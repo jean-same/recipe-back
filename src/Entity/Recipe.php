@@ -40,7 +40,7 @@ class Recipe
 
     #[ORM\ManyToOne(targetEntity: User::class, fetch: 'EAGER' , inversedBy: 'recipes')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['app_v1_recipe_browse' , 'app_v1_type_browse'])]
+    #[Groups(['app_v1_recipe_browse' ,'app_v1_type_browse'])]
     private $user;
 
     #[ORM\ManyToOne(targetEntity: Type::class, inversedBy: 'recipes')]

@@ -39,6 +39,7 @@ class RecipeController extends AbstractController
     public function browse(): Response
     {
         $recipes = $this->recipeRepository->findBy(["to_validate" => 0 ]) ;
+        //dd($recipes);
 
         return $this->json($this->found($recipes), Response::HTTP_OK, [], ['groups' => "app_v1_recipe_browse"]);
     }
@@ -230,4 +231,6 @@ class RecipeController extends AbstractController
             return $this->json($responseAsArray, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }
+    
 }
+
