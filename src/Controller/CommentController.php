@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/api/v1/comment', name: 'app_v1_comment')]
@@ -53,5 +54,34 @@ class CommentController extends AbstractController
         ];
 
         return $this->json($responseAsArray, Response::HTTP_CREATED);
+    }
+
+    #[Route('/{commentId<\d+>}', name: 'edit', methods: ['PATCH'])]
+    public function edit(int $commentId ,  Request $request) : Response {
+
+        $comment = $this->commentRepository->find($commentId);
+
+        if (is_null($comment)) {
+            return $this->commonMessageService->getNotFoundResponse();
+        }
+
+        $jsonContent = $request->getContent();
+
+        $this->serializer->deserialize($jsonContent, Comment::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $comment]);
+
+        $errors = $this->validator->validate($comment);
+
+        $this->commonMessageService->errorsCheck($errors);
+        
+
+        $this->em->flush();
+
+        $responseAsArray = [
+            'message' => 'Recette mise à jour',
+            'title' => $comment->getId()
+        ];
+
+        return $this->json($responseAsArray, Response::HTTP_OK);
+
     }
 }

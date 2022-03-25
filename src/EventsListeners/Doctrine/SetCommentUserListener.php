@@ -23,7 +23,7 @@ class SetCommentUserListener
 
     public function preUpdate( Comment $comment)
     { 
-        $user = $this->security->getUser();
-        $comment->setUser($user);
+       /* $user = $this->security->getUser();
+        $comment->setUser($user); */
     }
 }
