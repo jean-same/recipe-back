@@ -63,3 +63,19 @@ services:
                 }
             ]
 
+    App\EventsListeners\Doctrine\SetCommentUserListener:
+        tags:
+            [
+                {
+                    name    : 'doctrine.orm.entity_listener',
+                    event   :  prePersist,
+                    entity  : App\Entity\Comment
+                }
+                {
+                    name    : 'doctrine.orm.entity_listener',
+                    event   :  preUpdate,
+                    entity  : App\Entity\Comment 
+                }
+            ]
+
+
